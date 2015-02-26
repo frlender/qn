@@ -1,5 +1,7 @@
 import os
 import re
+import csv
+from pymongo import MongoClient
 
 
 def getallfiles(pathx,pattern):
@@ -83,3 +85,18 @@ def gmt2json(pathx,hasDescColumn=True,isFuzzy=False):
 			gmt.append({'gmt':gmtName,'desc':words[1],
 				'term':words[0],'items':words[2:]})
 	return gmt
+
+
+def csv2list(pathx,delim='\t'):
+    res = []
+    with open(pathx,'r') as pf:
+        for line in pf:
+            line = line.strip('\r\n\t')
+            res.append(line.split(delim))
+    return res
+    
+def getcoll(coll,db='LINCS_L1000',inst="localhost",u="readWriteUser",p="askQiaonan"):
+    client = MongoClient('mongodb://'+u+':'+p+'@'+inst+'/'+db)
+    db = client[db]
+    coll = db[coll]
+    return coll, db, client
