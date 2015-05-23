@@ -51,8 +51,20 @@ module.exports = yeoman.generators.Base.extend({
         this.destinationPath('.bowerrc')
       );
       this.fs.copy(
+        this.templatePath('Gruntfile.js'),
+        this.destinationPath('Gruntfile.js')
+      );
+      this.fs.copy(
         this.templatePath('views/_index.jade'),
         this.destinationPath('views/index.jade')
+      );
+      this.fs.copy(
+        this.templatePath('_index.js'),
+        this.destinationPath('index.js')
+      );
+      this.fs.copy(
+        this.templatePath('.gitignore'),
+        this.destinationPath('.gitignore')
       );
       this.bulkDirectory(
         'public','public'
