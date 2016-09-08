@@ -1,14 +1,19 @@
 import os
 import re
 import csv
-from pymongo import MongoClient
+from scipy.misc import comb
+from sklearn.decomposition import PCA
+from sklearn.manifold import MDS
+from mpl_toolkits.mplot3d import Axes3D
+import matplotlib.pyplot as plt
+
 
 
 def getallfiles(pathx,pattern):
 	# improvements: add ignorecase option for re
 	matchedPath = []
 	for directory, dirnames,filenames in os.walk(pathx):
-		eachDirectoryFiles = [os.path.join(directory,perFile) for perFile 
+		eachDirectoryFiles = [os.path.join(directory,perFile) for perFile
 			in filenames if re.search(pattern,perFile)]
 		if eachDirectoryFiles:
 			matchedPath = matchedPath + eachDirectoryFiles
@@ -86,6 +91,19 @@ def gmt2json(pathx,hasDescColumn=True,isFuzzy=False):
 				'term':words[0],'items':words[2:]})
 	return gmt
 
+def chunks(l, n):
+    """Yield successive n-sized chunks from l."""
+    for i in range(0, len(l), n):
+        yield l[i:i+n]
+
+copydict = lambda dct, *keys: {key: dct[key] for key in keys}
+
+def flatList(listOfLists):
+	return [item for sublist in listOfLists for item in sublist]
+
+def printEvery(unit,n):
+	if n%unit==0:
+		print(n)
 
 def csv2list(pathx,delim='\t'):
     res = []
@@ -94,9 +112,58 @@ def csv2list(pathx,delim='\t'):
             line = line.strip('\r\n\t')
             res.append(line.split(delim))
     return res
-    
-def getcoll(coll,db='LINCS_L1000',inst="localhost",u="readWriteUser",p="askQiaonan"):
-    client = MongoClient('mongodb://'+u+':'+p+'@'+inst+'/'+db)
-    db = client[db]
-    coll = db[coll]
-    return coll, db, client
+
+
+def plotPCA(mat,labels):
+    # columns are samples and rows are genes
+    pca = PCA(n_components=3)
+    pca.fit(mat)
+    ax = scatter3(pca.components_.T,labels)
+    ax.set_xlabel('PC1 ('+format(pca.explained_variance_ratio_[0],'.2')+')')
+    ax.set_ylabel('PC2 ('+format(pca.explained_variance_ratio_[1],'.2')+')')
+    ax.set_zlabel('PC3 ('+format(pca.explained_variance_ratio_[2],'.2')+')')
+
+def plotMDS(distMat,groups=None,labels=None):
+	# input should be distance matrix
+	mds = MDS(dissimilarity="precomputed",
+	max_iter=10000,eps=1e-6)
+	print('new')
+	mds.fit(distMat)
+	coordinates = mds.embedding_
+	fig = plt.figure()
+	ax = fig.add_subplot(111)
+	if groups:
+		colors = ['r','y','b','c']
+		uniqGroups = list(set(groups))
+		groupColors = []
+		for group in groups:
+			idx = uniqGroups.index(group)
+			groupColors.append(colors[idx])
+		ax.scatter(coordinates[:,0],coordinates[:,1],c=groupColors)
+	else:
+		ax.scatter(coordinates[:,0],coordinates[:,1])
+	if labels:
+		for i,label in enumerate(labels):
+			ax.annotate(label,xy=(coordinates[i,0],coordinates[i,1]),
+			xytext=(coordinates[i,0],coordinates[i,1]+0.05))
+	return ax
+
+
+def scatter3(mat,labels):
+    # colors = ["#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf"]
+    colors = ['r','y','b','c']
+    fig = plt.figure()
+    ax = fig.add_subplot(111, projection='3d')
+    plottedLabels = []
+    for i, label in enumerate(set(labels)):
+        plottedLabels.append(label)
+        idx = np.array([True if item==label else False for item in labels])
+        print(label,colors[i])
+        subMat = mat[idx,:]
+        xs = subMat[:,0]
+        ys = subMat[:,1]
+        zs = subMat[:,2]
+        ax.scatter(xs, ys, zs, c=colors[i], marker='o')
+    plt.show()
+    plt.legend(plottedLabels)
+    return ax
