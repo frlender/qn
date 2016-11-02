@@ -6,6 +6,7 @@ from sklearn.decomposition import PCA
 from sklearn.manifold import MDS
 from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.pyplot as plt
+from collections import OrderedDict
 
 
 
@@ -207,3 +208,12 @@ def tidy_split(df, column, sep='|', keep=False):
     new_df = df.iloc[indexes, :].copy()
     new_df[column] = new_values
     return new_df
+
+def groupby(iterable,keyFunc):
+	res = OrderedDict()
+	for item in iterable:
+		key = keyFunc(item)
+		if key not in res:
+			res[key] = []
+		res[key].append(item)
+	return res
