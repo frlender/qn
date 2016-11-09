@@ -217,3 +217,27 @@ def groupby(iterable,keyFunc):
 			res[key] = []
 		res[key].append(item)
 	return res
+
+def inferSchema(coll,exclude=['_id']):
+	projection = {}
+	if exclude:
+		for key in exclude:
+			projection[key] = False
+
+	summary = {}
+	total = 0
+	for doc in coll.find(projection=projection):
+		total+=1
+		for key in doc:
+			if key not in summary:
+				summary[key] = {'count':0,'type':set()}
+			summary[key]['count'] += 1
+			summary[key]['type'].add(type(doc[key]))
+
+	for key in summary:
+		summary[key]['ratio'] = summary[key]['count']/total
+		summary[key]['count'] = str(summary[key]['count'])+'/'+str(total)
+		summary[key]['type'] = list(summary[key]['type'])
+
+
+	return summary
