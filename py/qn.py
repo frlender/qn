@@ -7,6 +7,9 @@ from sklearn.manifold import MDS
 from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.pyplot as plt
 from collections import OrderedDict
+import numpy as np
+
+from clustergram import clustergram
 
 
 
@@ -239,5 +242,20 @@ def inferSchema(coll,exclude=['_id']):
 		summary[key]['count'] = str(summary[key]['count'])+'/'+str(total)
 		summary[key]['type'] = list(summary[key]['type'])
 
-
 	return summary
+
+def averageByIndex(series):
+	return series.groupby(level=0).mean()
+
+def getParDir(path):
+	return os.path.dirname(path)
+
+def getBaseDir():
+	currentPath = os.getcwd()
+	while currentPath != '/':
+		if os.path.isdir(currentPath+'/.git'):
+			break
+		currentPath = getParDir(currentPath)
+	if currentPath == '/':
+		raise Exception('Base dir not found because .git directory is not present')
+	return currentPath
