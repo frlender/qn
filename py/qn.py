@@ -259,3 +259,11 @@ def getBaseDir():
 	if currentPath == '/':
 		raise Exception('Base dir not found because .git directory is not present')
 	return currentPath
+
+def addToDict(target,source,keys):
+	for key in keys:
+		if isinstance(key,str):
+			target[key] = source[key]
+		else:
+			target[key[0]] = source[key[1]]
+	return target
