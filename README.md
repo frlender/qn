@@ -1,0 +1,16 @@
+# qn
+### Handy functions I used everyday. 
+
+Here are some examples:
+
+`getallfiles(path,pattern)`:
+Recursively find files under path that match a specific regex pattern. return a list of matching paths.
+
+
+`flatList(listOfLists)`: Flats a list of lists into a list of elements.
+
+`printEvery(unit,n)`: Print n if n can be evenly divided by unit.
+
+
+
+
