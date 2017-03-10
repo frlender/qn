@@ -54,10 +54,6 @@ def pinsplit(string,pattern,rangeValue):
 
 def getfilename(pathx):
 	return os.path.splitext(os.path.basename(pathx))[0]
-# test
-# print getallfiles('.','.py')
-# x = 'a,b,ccd-5,6'
-# print pinsplit(x,',',-1)
 
 def getNumber(s):
 	# parse string to number without raising error
