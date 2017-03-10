@@ -1,5 +1,5 @@
 # qn
-### Handy functions I used everyday. 
+### Handy functions I use everyday. 
 
 Here are some examples:
 
