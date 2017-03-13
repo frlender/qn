@@ -1,1 +1,1 @@
-from py.qn import *
+from .py.qn import *
