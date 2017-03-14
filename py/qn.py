@@ -258,7 +258,9 @@ def getBaseDir():
 def addToDict(target,source,keys):
 	for key in keys:
 		if isinstance(key,str):
-			target[key] = source[key]
+			if key in source:
+				target[key] = source[key]
 		else:
-			target[key[0]] = source[key[1]]
+			if key[1] in source:
+				target[key[0]] = source[key[1]]
 	return target
