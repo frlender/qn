@@ -11,6 +11,8 @@ Recursively find files under path that match a specific regex pattern. return a 
 
 `printEvery(unit,n)`: Print n if n can be evenly divided by unit.
 
+### Author
+**Q**iao**n**an Duan
 
 
 
