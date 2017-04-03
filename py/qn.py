@@ -8,6 +8,7 @@ from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.pyplot as plt
 from collections import OrderedDict
 import numpy as np
+import pickle
 
 
 
@@ -244,6 +245,15 @@ def averageByIndex(series):
 
 def getParDir(path):
 	return os.path.dirname(path)
+
+def loadPkl(path):
+	with open(path,'rb') as pf:
+		res = pickle.load(pf)
+	return res
+
+def dumpPkl(obj,path):
+	with open(path,'wb') as pf:
+		pickle.dump(obj,path)
 
 def getBaseDir():
 	currentPath = os.getcwd()
