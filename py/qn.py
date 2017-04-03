@@ -253,7 +253,7 @@ def loadPkl(path):
 
 def dumpPkl(obj,path):
 	with open(path,'wb') as pf:
-		pickle.dump(obj,path)
+		pickle.dump(obj,pf)
 
 def getBaseDir():
 	currentPath = os.getcwd()
