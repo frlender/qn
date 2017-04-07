@@ -1,4 +1,3 @@
-import os
 import re
 import csv
 from scipy.misc import comb
@@ -8,20 +7,10 @@ from mpl_toolkits.mplot3d import Axes3D
 import matplotlib.pyplot as plt
 from collections import OrderedDict
 import numpy as np
-import pickle
+from scipy.stats import rankdata
 
+from diskIO import *
 
-
-
-def getallfiles(pathx,pattern):
-	# improvements: add ignorecase option for re
-	matchedPath = []
-	for directory, dirnames,filenames in os.walk(pathx):
-		eachDirectoryFiles = [os.path.join(directory,perFile) for perFile
-			in filenames if re.search(pattern,perFile)]
-		if eachDirectoryFiles:
-			matchedPath = matchedPath + eachDirectoryFiles
-	return matchedPath
 
 def pinsplit(string,pattern,rangeValue):
 	# split a string by pattern at designated point
@@ -52,8 +41,6 @@ def pinsplit(string,pattern,rangeValue):
 		output.append(string[startIdx:len(string)])
 		return output
 
-def getfilename(pathx):
-	return os.path.splitext(os.path.basename(pathx))[0]
 
 def getNumber(s):
 	# parse string to number without raising error
@@ -61,35 +48,6 @@ def getNumber(s):
 		return float(s)
 	except ValueError:
 		return False
-
-
-def gmt2json(pathx,hasDescColumn=True,isFuzzy=False):
-	wordsAll = []
-	# secondColumn = []
-	with open(pathx,'r') as gf:
-		for line in gf:
-			line = line.strip('\r\n\t')
-#             if not a empty line
-			if line:
-				words = []
-				i = 0
-				for item in line.split('\t'):
-					if i==0:
-						words.append(item)
-					else:
-#               a gene symbol cannot be a string of numbers.
-						if item!="" and not isNumStr(item):
-							words.append(item)
-				wordsAll.append(words)
-				# secondColumn.append(words[1])
-	gmtName = getfilename(pathx)
-	print(gmtName)
-	gmt = []
-	if not isFuzzy and hasDescColumn:
-		for words in wordsAll:
-			gmt.append({'gmt':gmtName,'desc':words[1],
-				'term':words[0],'items':words[2:]})
-	return gmt
 
 def chunks(l, n):
     """Yield successive n-sized chunks from l."""
@@ -112,7 +70,6 @@ def csv2list(pathx,delim='\t'):
             line = line.strip('\r\n\t')
             res.append(line.split(delim))
     return res
-
 
 def plotPCA(mat,labels):
     # columns are samples and rows are genes
@@ -243,27 +200,6 @@ def inferSchema(coll,exclude=['_id']):
 def averageByIndex(series):
 	return series.groupby(level=0).mean()
 
-def getParDir(path):
-	return os.path.dirname(path)
-
-def loadPkl(path):
-	with open(path,'rb') as pf:
-		res = pickle.load(pf)
-	return res
-
-def dumpPkl(obj,path):
-	with open(path,'wb') as pf:
-		pickle.dump(obj,pf)
-
-def getBaseDir():
-	currentPath = os.getcwd()
-	while currentPath != '/':
-		if os.path.isdir(currentPath+'/.git'):
-			break
-		currentPath = getParDir(currentPath)
-	if currentPath == '/':
-		raise Exception('Base dir not found because .git directory is not present')
-	return currentPath
 
 def addToDict(target,source,keys):
 	for key in keys:
@@ -274,3 +210,14 @@ def addToDict(target,source,keys):
 			if key[1] in source:
 				target[key[0]] = source[key[1]]
 	return target
+
+def rpSort(objects,functions):
+	# vals smaller the better
+	ranks = []
+	for function in functions:
+		vals =[function(x) for x in objects]
+		ranks.append(rankdata(vals))
+	ranks = np.vstack(ranks).T
+	rps = np.prod(ranks,axis=1).tolist()
+	sortedObjects, _ = zip(*sorted(zip(objects,rps),key=lambda x:x[1]))
+	return sortedObjects
