@@ -9,7 +9,7 @@ from collections import OrderedDict
 import numpy as np
 from scipy.stats import rankdata
 
-from diskIO import *
+from .diskIO import *
 
 
 def pinsplit(string,pattern,rangeValue):
@@ -59,9 +59,12 @@ copydict = lambda dct, *keys: {key: dct[key] for key in keys}
 def flatList(listOfLists):
 	return [item for sublist in listOfLists for item in sublist]
 
-def printEvery(unit,n):
+def printEvery(unit,n,string=None):
 	if n%unit==0:
-		print(n)
+		if string:
+			print(string)
+		else:
+			print(n)
 
 def csv2list(pathx,delim='\t'):
     res = []
@@ -84,7 +87,6 @@ def plotMDS(distMat,groups=None,labels=None):
 	# input should be distance matrix
 	mds = MDS(dissimilarity="precomputed",
 	max_iter=10000,eps=1e-6)
-	print('new')
 	mds.fit(distMat)
 	coordinates = mds.embedding_
 	fig = plt.figure()
@@ -108,7 +110,7 @@ def plotMDS(distMat,groups=None,labels=None):
 
 def scatter3(mat,labels):
     # colors = ["#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf"]
-    colors = ['r','y','b','c']
+    colors = ['r','b','g','c','m','y',]
     fig = plt.figure()
     ax = fig.add_subplot(111, projection='3d')
     plottedLabels = []
@@ -221,3 +223,36 @@ def rpSort(objects,functions):
 	rps = np.prod(ranks,axis=1).tolist()
 	sortedObjects, _ = zip(*sorted(zip(objects,rps),key=lambda x:x[1]))
 	return sortedObjects
+
+def correct_pvals(pvalues, correction_type = "Benjamini-Hochberg"):
+    """
+    consistent with R - print correct_pvalues_for_multiple_testing([0.0, 0.01, 0.029, 0.03, 0.031, 0.05, 0.069, 0.07, 0.071, 0.09, 0.1])
+    """
+    from numpy import array, empty
+    pvalues = array(pvalues)
+    n = float(pvalues.shape[0])
+    new_pvalues = empty(n)
+    if correction_type == "Bonferroni":
+        new_pvalues = n * pvalues
+    elif correction_type == "Bonferroni-Holm":
+        values = [ (pvalue, i) for i, pvalue in enumerate(pvalues) ]
+        values.sort()
+        for rank, vals in enumerate(values):
+            pvalue, i = vals
+            new_pvalues[i] = (n-rank) * pvalue
+    elif correction_type == "Benjamini-Hochberg":
+        values = [ (pvalue, i) for i, pvalue in enumerate(pvalues) ]
+        values.sort()
+        values.reverse()
+        new_values = []
+        for i, vals in enumerate(values):
+            rank = n - i
+            pvalue, index = vals
+            new_values.append((n/rank) * pvalue)
+        for i in range(0, int(n)-1):
+            if new_values[i] < new_values[i+1]:
+                new_values[i+1] = new_values[i]
+        for i, vals in enumerate(values):
+            pvalue, index = vals
+            new_pvalues[index] = new_values[i]
+    return new_pvalues
