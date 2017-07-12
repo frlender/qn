@@ -256,3 +256,14 @@ def correct_pvals(pvalues, correction_type = "Benjamini-Hochberg"):
             pvalue, index = vals
             new_pvalues[index] = new_values[i]
     return new_pvalues
+
+
+def vectorize(targets):
+    targets_flat = qn.flatList(targets)
+    uniq = pd.Series(list(set(targets_flat)))
+    arr = []
+    for item in targets:
+        vec = uniq.isin(item).values.tolist()
+        arr.append(vec)
+    mat = np.array(arr).astype(np.int)
+    return mat
