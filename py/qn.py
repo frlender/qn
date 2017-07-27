@@ -8,6 +8,7 @@ import matplotlib.pyplot as plt
 from collections import OrderedDict
 import numpy as np
 from scipy.stats import rankdata
+import pandas as pd
 
 from .diskIO import *
 
@@ -259,7 +260,7 @@ def correct_pvals(pvalues, correction_type = "Benjamini-Hochberg"):
 
 
 def vectorize(targets):
-    targets_flat = qn.flatList(targets)
+    targets_flat = flatList(targets)
     uniq = pd.Series(list(set(targets_flat)))
     arr = []
     for item in targets:
