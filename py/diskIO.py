@@ -45,6 +45,6 @@ def dump(data_str,path,fmt='txt'):
 		if fmt == 'txt':
 			pf.write(data_str)
 		elif fmt == 'json':
-			res = json.dumps(data_str,pf)
+			res = json.dump(data_str,pf)
 		elif fmt == 'yaml':
-			res = yaml.dumps(data_str,pf)
+			res = yaml.dump(data_str,pf)
