@@ -30,21 +30,29 @@ def dumpPkl(obj,path):
 	with open(path,'wb') as pf:
 		pickle.dump(obj,pf)
 
-def load(path,fmt='txt'):
+def load(path,fmt=None):
 	with open(path,'r') as pf:
+		if fmt==None:
+			fmt = path.split('.')[-1]
 		if fmt == 'txt':
 			res = pf.read()
 		elif fmt == 'json':
 			res = json.load(pf)
 		elif fmt == 'yaml':
 			res = yaml.load(pf)
+		elif fmt == 'pkl':
+			res = pickle.load(pf)
 	return res
 
-def dump(data_str,path,fmt='txt'):
+def dump(data_str,path,fmt=None):
 	with open(path,'w') as pf:
+		if fmt == None:
+			fmt = path.split('.')[-1]
 		if fmt == 'txt':
 			pf.write(data_str)
 		elif fmt == 'json':
 			res = json.dump(data_str,pf)
 		elif fmt == 'yaml':
 			res = yaml.dump(data_str,pf)
+		elif fmt == 'pkl':
+			res = pickle.dump(data_str,pf)
