@@ -42,7 +42,7 @@ def load(path,fmt=None):
 			res = pf.read()
 		elif fmt == 'json':
 			res = json.load(pf)
-		elif fmt == 'yaml':
+		elif fmt == 'yaml' or fmt == 'yml':
 			res = yaml.load(pf)
 		elif fmt == 'pkl':
 			res = pickle.load(pf)
