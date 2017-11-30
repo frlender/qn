@@ -31,6 +31,10 @@ def dumpPkl(obj,path):
 		pickle.dump(obj,pf)
 
 def load(path,fmt='txt'):
+	if fmt == 'pkl':
+		with open(path,'rb') as pf:
+			res = pickle.load(pf)
+		return res
 	with open(path,'r') as pf:
 		if fmt == 'txt':
 			res = pf.read()
@@ -38,11 +42,13 @@ def load(path,fmt='txt'):
 			res = json.load(pf)
 		elif fmt == 'yaml' or fmt == 'yml':
 			res = yaml.load(pf)
-		elif fmt == 'pkl':
-			res = pickle.load(pf)
 	return res
 
 def dump(data_str,path,fmt='txt'):
+	if fmt == 'pkl':
+		with open(path,'wb') as pf:
+			pickle.dump(data_str,pf)
+		return
 	with open(path,'w') as pf:
 		if fmt == 'txt':
 			pf.write(data_str)
