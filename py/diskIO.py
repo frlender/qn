@@ -30,7 +30,11 @@ def dumpPkl(obj,path):
 	with open(path,'wb') as pf:
 		pickle.dump(obj,pf)
 
-def load(path,fmt='txt'):
+def load(path,fmt=None):
+	if fmt:
+		fmt = fmt
+	else:
+		fmt = path.split('.')[-1]
 	if fmt == 'pkl':
 		with open(path,'rb') as pf:
 			res = pickle.load(pf)
@@ -44,7 +48,11 @@ def load(path,fmt='txt'):
 			res = yaml.load(pf)
 	return res
 
-def dump(data_str,path,fmt='txt'):
+def dump(data_str,path,fmt=None):
+	if fmt:
+		fmt = fmt
+	else:
+		fmt = path.split('.')[-1]
 	if fmt == 'pkl':
 		with open(path,'wb') as pf:
 			pickle.dump(data_str,pf)
