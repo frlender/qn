@@ -38,6 +38,8 @@ def load(path,fmt='txt'):
 			res = json.load(pf)
 		elif fmt == 'yaml' or fmt == 'yml':
 			res = yaml.load(pf)
+		elif fmt == 'pkl':
+			res = pickle.load(pf)
 	return res
 
 def dump(data_str,path,fmt='txt'):
@@ -45,6 +47,8 @@ def dump(data_str,path,fmt='txt'):
 		if fmt == 'txt':
 			pf.write(data_str)
 		elif fmt == 'json':
-			res = json.dump(data_str,pf)
-		elif fmt == 'yaml':
-			res = yaml.dump(data_str,pf,default_flow_style=False)
+			json.dump(data_str,pf)
+		elif fmt == 'yaml' or fmt == 'yml':
+			yaml.dump(data_str,pf,default_flow_style=False)
+		elif fmt =='pkl':
+			pickle.dump(data_str,pf)
