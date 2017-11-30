@@ -36,7 +36,7 @@ def load(path,fmt='txt'):
 			res = pf.read()
 		elif fmt == 'json':
 			res = json.load(pf)
-		elif fmt == 'yaml':
+		elif fmt == 'yaml' or fmt == 'yml':
 			res = yaml.load(pf)
 	return res
 
