@@ -1,1 +1,1 @@
-from qn import *
+from .qn import *
