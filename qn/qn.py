@@ -110,8 +110,8 @@ def plotMDS(distMat,groups=None,labels=None):
 
 
 def scatter3(mat,labels):
-    # colors = ["#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf"]
-    colors = ['r','b','g','c','m','y',]
+    colors = ["#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf"]
+    # colors = ['r','b','g','c','m','y',]
     fig = plt.figure()
     ax = fig.add_subplot(111, projection='3d')
     plottedLabels = []
