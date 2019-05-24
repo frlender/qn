@@ -55,6 +55,15 @@ def chunks(l, n):
     for i in range(0, len(l), n):
         yield l[i:i+n]
 
+def bins(lst, n):
+	"""group elements in lst into n bins"""
+    splitted = []
+    for i in reversed(range(1, n + 1)):
+        split_point = len(lst)//i
+        splitted.append(lst[:split_point])
+        lst = lst[split_point:]
+    return splitted
+
 copydict = lambda dct, *keys: {key: dct[key] for key in keys}
 
 def flatList(listOfLists):
@@ -93,7 +102,7 @@ def plotMDS(distMat,groups=None,labels=None):
 	fig = plt.figure()
 	ax = fig.add_subplot(111)
 	if groups:
-		colors = ['r','y','b','c']
+		colors = ["#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf"]
 		uniqGroups = list(set(groups))
 		groupColors = []
 		for group in groups:
