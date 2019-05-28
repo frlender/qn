@@ -53,16 +53,16 @@ def getNumber(s):
 def chunks(l, n):
     """Yield successive n-sized chunks from l."""
     for i in range(0, len(l), n):
-        yield l[i:i+n]
+    	yield l[i:i+n]
 
 def bins(lst, n):
 	"""group elements in lst into n bins"""
-    splitted = []
-    for i in reversed(range(1, n + 1)):
-        split_point = len(lst)//i
-        splitted.append(lst[:split_point])
-        lst = lst[split_point:]
-    return splitted
+	splitted = []
+	for i in reversed(range(1, n + 1)):
+		split_point = len(lst)//i
+		splitted.append(lst[:split_point])
+		lst = lst[split_point:]
+	return splitted
 
 copydict = lambda dct, *keys: {key: dct[key] for key in keys}
 
