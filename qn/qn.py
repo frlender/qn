@@ -1,6 +1,9 @@
 import re
 import csv
-from scipy.misc import comb
+try:
+	from scipy.misc import comb
+except:
+	from scipy.special import comb
 from sklearn.decomposition import PCA
 from sklearn.manifold import MDS
 from mpl_toolkits.mplot3d import Axes3D
