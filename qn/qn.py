@@ -11,7 +11,7 @@ from scipy.stats import rankdata
 import pandas as pd
 import os
 
-# from .diskIO import *
+from .diskIO import *
 
 def setdir(path):
     try:
