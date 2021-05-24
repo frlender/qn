@@ -13,7 +13,7 @@ import os
 
 from .diskIO import *
 
-def setdir(path):
+def cd(path):
     try:
         os.chdir(path)
     except:
