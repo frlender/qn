@@ -1,3 +1,4 @@
+LICENSE
 README.md
 setup.py
 qn/__init__.py
@@ -5,6 +6,7 @@ qn/diskIO.py
 qn/legacy.py
 qn/qn.py
 qn/test.py
+qn/viz.py
 qn.egg-info/PKG-INFO
 qn.egg-info/SOURCES.txt
 qn.egg-info/dependency_links.txt
