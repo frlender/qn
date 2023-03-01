@@ -1,17 +1,18 @@
 import re
 import csv
-try:
-	from scipy.misc import comb
-except:
-	from scipy.special import comb
 
 from collections import OrderedDict
 import numpy as np
-from scipy.stats import rankdata
 import pandas as pd
 import os
+import importlib
+import sys
+import types
+import dill
 
 from .diskIO import *
+
+
 
 def cd(path):
     try:
@@ -20,10 +21,34 @@ def cd(path):
         pass
     return 
 
+def save_session(gb,path):
+    # gb is globals() in the main session
+    # path of a .pkl file
+    ss = {}
+    gb = globals()
+    for k,v in gb.items():
+        if '_' != k[0] and not isinstance(v,types.ModuleType):
+            ss[k] = v
+    rm = ['gb','v','In','Out','exit','quit','NamespaceMagics']
+    for x in rm:
+        if x in ss:
+            del ss[x]
+    with open(path,'wb') as fx:
+        dill.dump(ss,fx)
+    return 0
+
+def load_session(gb,path):
+    with open(path,'rb') as fx:
+        ss = dill.load(fx)
+    for k,v in ss.items():
+        gb[k] = v
+    return 0
+
 def env(env_name):
     return os.getenv(env_name)
+    
 
-def config(glb,mode='default'):
+def config(glb,mode='default',load_mode='default'):
     config_path = env('PY_CONFIGS')
     mode_path = config_path + '/' + mode + '.py'
     code = load(mode_path,'txt')
@@ -32,9 +57,24 @@ def config(glb,mode='default'):
     ns = {} # use ns to prevent contaminating the glb namespace
     exec(code,ns)
     glb['_q'] = ns['_q']
+    
+    load_mode_path = config_path + '/' + mode + '_load.py'
+    load_code = load(load_mode_path,'txt')
+    exec(load_code, ns)
+    for lib in ns['libs']:
+        glb[lib] = ns[lib]
+        
     return 0
-    
-    
+ 
+def reload(mod,subs=None):
+    if subs is None:
+        subs = mod.__all__
+    mod_name = mod.__name__
+    for sub in subs:
+        importlib.reload(sys.modules[f'{mod_name}.{sub}'])
+    importlib.reload(sys.modules[mod_name])
+    return 0
+
 def pinsplit(string,pattern,rangeValue):
 	# split a string by pattern at designated point
 	# e.g. pinsplit('a,b,ccd-5,6',',',3) outputs ['a,b,ccd-5','6']
@@ -194,6 +234,7 @@ def addToDict(target,source,keys):
 
 def rpSort(objects,functions):
 	# vals smaller the better
+	from scipy.stats import rankdata
 	ranks = []
 	for function in functions:
 		vals =[function(x) for x in objects]

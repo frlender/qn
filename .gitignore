@@ -1,3 +1,4 @@
 __pycache__
 !.py
 dist/*
+qn/.ipynb_checkpoints
