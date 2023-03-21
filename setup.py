@@ -8,4 +8,14 @@ setup(name='qn',
       author_email='geonann@gmail.com',
       license='MIT',
       packages=['qn'],
+      # install_requires=[
+      #       'matplotlib',
+      #       'seaborn',
+      #       'numpy',
+      #       'scipy',
+      #       'pandas',
+      #       'PyYAML',
+      #       'matplotlib-venn',
+      #       'scikit-learn'
+      # ],
       zip_safe=False)

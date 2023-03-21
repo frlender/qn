@@ -45,7 +45,7 @@ def load(path,fmt=None):
 		elif fmt == 'json':
 			res = json.load(pf)
 		elif fmt == 'yaml' or fmt == 'yml':
-			res = yaml.load(pf)
+			res = yaml.safe_load(pf)
 	return res
 
 def dump(data_str,path,fmt=None):
