@@ -7,10 +7,7 @@ setup(name='qn',
       author='Qiaonan Duan',
       author_email='geonann@gmail.com',
       license='MIT',
-      packages=['qn'],
-      package_data={
-          'configs':['*.py']
-      },
+      packages=find_packages(),
       # install_requires=[
       #       'matplotlib',
       #       'seaborn',
