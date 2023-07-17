@@ -49,23 +49,27 @@ def env(env_name):
     
 
 def config(glb,mode='default',load_mode='default'):
-    config_path = env('PY_CONFIGS')
-    mode_path = config_path + '/' + mode + '.py'
-    code = load(mode_path,'txt')
-    # exec(code,global())
-    # return _q
+    default_config_path = os.path.join(os.path.dirname(__file__),'configs')
+    config_path = env('PY_CONFIGS') if env('PY_CONFIGS') else default_config_path
+    mode_path = os.path.join(config_path,mode+'.py')
+    load_mode_path = os.path.join(config_path,load_mode+'_load.py')
+
     ns = {} # use ns to prevent contaminating the glb namespace
-    exec(code,ns)
-    glb['_q'] = ns['_q']
+    if os.path.isfile(mode_path):
+        code = load(mode_path,'txt')
+        # exec(code,global())
+        # return _q
+        exec(code,ns)
+        glb['_q'] = ns['_q']
     
-    load_mode_path = config_path + '/' + mode + '_load.py'
-    load_code = load(load_mode_path,'txt')
-    exec(load_code, ns)
-    for lib in ns['libs']:
-        glb[lib] = ns[lib]
+    if os.path.isfile(load_mode_path):
+        load_code = load(load_mode_path,'txt')
+        exec(load_code, ns)
+        for lib in ns['libs']:
+            glb[lib] = ns[lib]
         
-    return 0
- 
+
+
 def reload(mod,subs=None):
     if subs is None:
         subs = mod.__all__
