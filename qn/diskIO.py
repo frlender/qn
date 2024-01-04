@@ -3,6 +3,7 @@ import re
 import pickle
 import json
 import yaml
+import pandas as pd
 
 def getallfiles(pathx,pattern):
 	# improvements: add ignorecase option for re
@@ -36,8 +37,12 @@ def load(path,fmt=None):
 	else:
 		fmt = path.split('.')[-1]
 	if fmt == 'pkl':
-		with open(path,'rb') as pf:
-			res = pickle.load(pf)
+		try:
+			with open(path,'rb') as pf:
+				res = pickle.load(pf)
+		except:
+			with open(path,'rb') as pf:
+				res = pd.read_pickle(pf)
 		return res
 	with open(path,'r') as pf:
 		if fmt == 'txt':
