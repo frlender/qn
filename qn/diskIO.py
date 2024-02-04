@@ -5,10 +5,12 @@ import json
 import yaml
 import pandas as pd
 
-def getallfiles(pathx,pattern):
+def getallfiles(pathx,pattern,ignoreHidden=True):
 	# improvements: add ignorecase option for re
 	matchedPath = []
 	for directory, dirnames,filenames in os.walk(pathx):
+		if ignoreHidden and directory.startswith('.'):
+			continue
 		eachDirectoryFiles = [os.path.join(directory,perFile) for perFile
 			in filenames if re.search(pattern,perFile)]
 		if eachDirectoryFiles:
