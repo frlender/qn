@@ -1,4 +1,7 @@
 # qn
+Install:
+`pip install git+https://github.com/frlender/qn.git`
+
 ### Handy functions I use everyday. 
 
 Here are some examples:
