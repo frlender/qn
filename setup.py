@@ -1,7 +1,7 @@
 from setuptools import setup, find_packages
 
 setup(name='qn',
-      version='0.2.3',
+      version='0.2.5',
       description='Handy functions I use everyday.',
       url='https://github.com/frlender/qn',
       author='Qiaonan Duan',
