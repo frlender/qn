@@ -3,11 +3,14 @@ import re
 import pickle
 import json
 import yaml
+import pandas as pd
 
-def getallfiles(pathx,pattern):
+def getallfiles(pathx,pattern,ignoreHidden=True):
 	# improvements: add ignorecase option for re
 	matchedPath = []
 	for directory, dirnames,filenames in os.walk(pathx):
+		if ignoreHidden and directory.startswith('.'):
+			continue
 		eachDirectoryFiles = [os.path.join(directory,perFile) for perFile
 			in filenames if re.search(pattern,perFile)]
 		if eachDirectoryFiles:
@@ -36,8 +39,12 @@ def load(path,fmt=None):
 	else:
 		fmt = path.split('.')[-1]
 	if fmt == 'pkl':
-		with open(path,'rb') as pf:
-			res = pickle.load(pf)
+		try:
+			with open(path,'rb') as pf:
+				res = pickle.load(pf)
+		except:
+			with open(path,'rb') as pf:
+				res = pd.read_pickle(pf)
 		return res
 	with open(path,'r') as pf:
 		if fmt == 'txt':

@@ -13,4 +13,6 @@ qn.egg-info/dependency_links.txt
 qn.egg-info/not-zip-safe
 qn.egg-info/top_level.txt
 qn/configs/__init__.py
+qn/configs/default.example.py
+qn/configs/default.py
 qn/configs/default_load.py
