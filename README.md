@@ -1,8 +1,10 @@
 # qn
 Install:
+
 `pip install qn`
 
 Install dev:
+
 `pip install git+https://github.com/frlender/qn.git`
 
 ### Handy functions I use everyday. 
