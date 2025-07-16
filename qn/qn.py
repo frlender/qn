@@ -60,7 +60,8 @@ def config(glb,mode='default',load_mode='default'):
         # exec(code,global())
         # return _q
         exec(code,ns)
-        glb['_q'] = ns['_q']
+        if '_q' in ns:
+            glb['_q'] = ns['_q']
     
     if os.path.isfile(load_mode_path):
         load_code = load(load_mode_path,'txt')
