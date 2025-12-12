@@ -12,6 +12,15 @@ import dill
 
 from .diskIO import *
 
+def get_mongo(is_async=False,uri='mongodb://localhost:27017/'):
+    if is_async:
+        from motor.motor_asyncio import AsyncIOMotorClient
+        c = AsyncIOMotorClient(uri)
+    else:
+        from pymongo import MongoClient
+        c = MongoClient(uri)
+    return c
+
 
 
 def cd(path):
