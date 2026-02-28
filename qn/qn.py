@@ -10,6 +10,9 @@ import sys
 import types
 import dill
 
+import importlib.util
+import sys
+
 from .diskIO import *
 
 def get_mongo(is_async=False,uri='mongodb://localhost:27017/'):
@@ -21,6 +24,21 @@ def get_mongo(is_async=False,uri='mongodb://localhost:27017/'):
         c = MongoClient(uri)
     return c
 
+
+def load_module(module_name, file_path):
+    # 1. Create a module spec from the file path
+    spec = importlib.util.spec_from_file_location(module_name, file_path)
+    
+    # 2. Create a new module based on the spec
+    module = importlib.util.module_from_spec(spec)
+    
+    # 3. Add to sys.modules (optional, but helps with pickling/sub-imports)
+    sys.modules[module_name] = module
+    
+    # 4. Execute the module to actually load the functions
+    spec.loader.exec_module(module)
+    
+    return module
 
 
 def cd(path):
